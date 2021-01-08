@@ -1,5 +1,6 @@
 package com.example.moneylover2.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -20,6 +21,6 @@ public interface TransactionDao {
     @Query("DELETE FROM transaction_table")
     void deleteAll();
 
-    @Query("SELECT * from transaction_table")
-    List<Transaction> getAllTransactions();
+    @Query("SELECT * from transaction_table ORDER BY id DESC")
+    LiveData<List<Transaction>> getAllTransactions();
 }

@@ -9,12 +9,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.room.Room;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moneylover2.R;
-import com.example.moneylover2.database.TransactionDatabase;
+import com.example.moneylover2.adapter.TransactionListAdapter;
 import com.example.moneylover2.model.Transaction;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.moneylover2.viewmodel.TransactionViewModel;
 
 import static com.example.moneylover2.ui.NewTransactionActivity.EXTRA_REPLY;
 
@@ -22,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int NEW_TRANSACTION_ACTIVITY_REQUEST_CODE = 1;
     private TextView textView;
-    private TransactionDatabase db;
+    private TransactionViewModel transactionViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +34,15 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         textView = findViewById(R.id.textView);
-        FloatingActionButton fab = findViewById(R.id.fab);
+        transactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
 
-        db = Room.databaseBuilder(getApplicationContext(),
-                TransactionDatabase.class, "transaction_db").build();
+        RecyclerView recyclerView = findViewById(R.id.recyclerview);
+        final TransactionListAdapter adapter = new TransactionListAdapter(this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Update the cached copy of the words in the adapter.
+        transactionViewModel.getAllTransactions().observe(this, adapter::setTransactions);
     }
 
     public void addNewTransaction(View view) {
@@ -72,8 +79,10 @@ public class MainActivity extends AppCompatActivity {
 
             Transaction transaction1 = (Transaction) data.getSerializableExtra(EXTRA_REPLY);
             String transaction_string = transaction1.toString();
-            textView.setText(transaction_string);
 
+
+            transactionViewModel.insert((transaction1));
+            textView.setText(transaction_string);
         }
     }
 }
