@@ -18,7 +18,6 @@ public class TransactionViewModel extends AndroidViewModel {
     public TransactionViewModel(Application application) {
         super(application);
         Repository = new TransactionRepository(application);
-        //allTransactions = Repository.getAllTransactions();
     }
 
     public LiveData<List<Transaction>> getAllTransactions() {

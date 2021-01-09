@@ -6,15 +6,21 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.example.moneylover2.dao.CategoryDao;
 import com.example.moneylover2.dao.TransactionDao;
+import com.example.moneylover2.model.Category;
 import com.example.moneylover2.model.Transaction;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Transaction.class}, version = 1, exportSchema = false)
+@Database(entities = {Transaction.class, Category.class},
+        version = 1, exportSchema = false)
 public abstract class TransactionDatabase extends RoomDatabase {
+
     public abstract TransactionDao transactionDao();
+
+    public abstract CategoryDao categoryDao();
 
     //  Singleton
     private static TransactionDatabase INSTANCE;
@@ -30,10 +36,10 @@ public abstract class TransactionDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     // Create database here.
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            TransactionDatabase.class, "transaction_database")
+                            TransactionDatabase.class, "moneylover_database")
                             // Wipes and rebuilds instead of migrating if no Migration object.
                             // Migration is not part of this practical.
-//                            .fallbackToDestructiveMigration()
+                            .fallbackToDestructiveMigration()
 //                            .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
@@ -41,7 +47,6 @@ public abstract class TransactionDatabase extends RoomDatabase {
         }
         return INSTANCE;
     }
-
 
 
 }

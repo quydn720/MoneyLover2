@@ -18,11 +18,12 @@ import com.example.moneylover2.adapter.TransactionListAdapter;
 import com.example.moneylover2.model.Transaction;
 import com.example.moneylover2.viewmodel.TransactionViewModel;
 
-import static com.example.moneylover2.ui.NewTransactionActivity.EXTRA_REPLY;
+import static com.example.moneylover2.ui.NewTransactionActivity.EXTRA_TRANSACTION;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final int NEW_TRANSACTION_ACTIVITY_REQUEST_CODE = 1;
+
     private TextView textView;
     private TransactionViewModel transactionViewModel;
 
@@ -62,22 +63,16 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-        switch (id){
+        switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;
             case R.id.action_category:
-                Intent intent = new Intent(MainActivity.this, NewCategoryActivity.class);
-                startActivity(intent);
-                break;
+                Intent intent1 = new Intent(MainActivity.this, NewCategoryActivity.class);
+                startActivity(intent1);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -85,12 +80,8 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == NEW_TRANSACTION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
 
-            Transaction transaction1 = (Transaction) data.getSerializableExtra(EXTRA_REPLY);
-            String transaction_string = transaction1.toString();
-
-
+            Transaction transaction1 = (Transaction) data.getSerializableExtra(EXTRA_TRANSACTION);
             transactionViewModel.insert((transaction1));
-            textView.setText(transaction_string);
         }
     }
 }
