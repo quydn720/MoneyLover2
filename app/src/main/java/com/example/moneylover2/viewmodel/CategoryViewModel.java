@@ -30,8 +30,11 @@ public class CategoryViewModel extends AndroidViewModel {
         allCategories = Repository.getAllCategories();
         return allCategories;
     }
-    public List<String> getAllCategoryName(){
+
+    public List<String> getAllCategoryName() {
         allCategoryName = Repository.getAllCategoryName();
         return allCategoryName;
     }
+
+
 }

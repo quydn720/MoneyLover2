@@ -1,5 +1,6 @@
 package com.example.moneylover2.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -14,13 +15,18 @@ import com.example.moneylover2.adapter.CategoryListAdapter;
 import com.example.moneylover2.model.Category;
 import com.example.moneylover2.viewmodel.CategoryViewModel;
 
+import java.io.Serializable;
+import java.util.List;
+
 public class NewCategoryActivity extends AppCompatActivity {
 
+    public static final String ALL_CATEGORIES = "com.example.android.moneylover.ALL_CATEGORIES";
 
     private EditText editText_new_category;
-    CategoryListAdapter adapter;
 
     private CategoryViewModel categoryViewModel;
+
+    private List<Category> allCategories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,22 +36,34 @@ public class NewCategoryActivity extends AppCompatActivity {
         editText_new_category = findViewById(R.id.editText_new_category);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerview_category);
-        adapter = new CategoryListAdapter(this);
+        CategoryListAdapter adapter = new CategoryListAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
+
+        // Update the cached copy of the words in the adapter.
         categoryViewModel.getAllCategories().observe(this, categories -> {
-            // Update the cached copy of the words in the adapter.
             adapter.setAllCategories(categories);
+            allCategories = categories;
         });
     }
 
     public void addNewCategory(View view) {
 
+//        try {
         String name = editText_new_category.getText().toString();
         Category category = new Category(name);
-
         categoryViewModel.insert(category);
+
+        Intent intent = new Intent();
+        intent.putExtra(ALL_CATEGORIES, (Serializable) allCategories);
+        setResult(RESULT_OK, intent);
+        finish();
+//
+//        } catch (Exception e) {
+//            Toast.makeText(this, "You must enter the category title", Toast.LENGTH_LONG).show();
+//        }
     }
+
 }

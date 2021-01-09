@@ -11,8 +11,8 @@ import java.io.Serializable;
 public class Transaction implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    public int id;
+    @ColumnInfo(name = "transactionId")
+    public int transactionId;
 
     @ColumnInfo(name = "category")
     public String Category;

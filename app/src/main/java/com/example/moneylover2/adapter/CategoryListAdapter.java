@@ -51,9 +51,6 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         if (allCategories != null) {
             Category current = allCategories.get(position);
             holder.categoryItemView.setText(current.getName());
-        } else {
-            // Covers the case of data not being ready yet.
-            //holder.categoryItemView.setText("No Word");
         }
     }
 

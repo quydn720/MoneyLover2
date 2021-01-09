@@ -15,17 +15,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moneylover2.R;
 import com.example.moneylover2.adapter.TransactionListAdapter;
+import com.example.moneylover2.model.Category;
 import com.example.moneylover2.model.Transaction;
 import com.example.moneylover2.viewmodel.TransactionViewModel;
 
+import java.io.Serializable;
+import java.util.List;
+
+import static com.example.moneylover2.ui.NewCategoryActivity.ALL_CATEGORIES;
 import static com.example.moneylover2.ui.NewTransactionActivity.EXTRA_TRANSACTION;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final int NEW_TRANSACTION_ACTIVITY_REQUEST_CODE = 1;
+    private static final int ALL_CATEGORIES_ACTIVITY_REQUEST_CODE = 2;
+    public static final String ALL_CATEGORIES_TITLE =  "com.example.android.moneylover.extra.ALL_CATEGORIES";
 
     private TextView textView;
     private TransactionViewModel transactionViewModel;
+    private List<Category> categoryList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         textView = findViewById(R.id.textView);
+
         transactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
@@ -48,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void addNewTransaction(View view) {
         Intent intent = new Intent(MainActivity.this, NewTransactionActivity.class);
+        intent.putExtra(ALL_CATEGORIES_TITLE, (Serializable) categoryList);
         startActivityForResult(intent, NEW_TRANSACTION_ACTIVITY_REQUEST_CODE);
     }
 
@@ -67,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_settings:
                 return true;
             case R.id.action_category:
-                Intent intent1 = new Intent(MainActivity.this, NewCategoryActivity.class);
-                startActivity(intent1);
+                Intent intent = new Intent(MainActivity.this, NewCategoryActivity.class);
+                startActivityForResult(intent, ALL_CATEGORIES_ACTIVITY_REQUEST_CODE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -80,8 +90,12 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == NEW_TRANSACTION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
 
-            Transaction transaction1 = (Transaction) data.getSerializableExtra(EXTRA_TRANSACTION);
-            transactionViewModel.insert((transaction1));
+            Transaction transaction = (Transaction) data.getSerializableExtra(EXTRA_TRANSACTION);
+            transactionViewModel.insert((transaction));
+        }
+        else if (requestCode == ALL_CATEGORIES_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+
+             categoryList = (List<Category>) data.getSerializableExtra(ALL_CATEGORIES);
         }
     }
 }

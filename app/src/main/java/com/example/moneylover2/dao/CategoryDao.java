@@ -14,9 +14,10 @@ public interface CategoryDao {
     @Insert
     void insert(Category category);
 
-    @Query("SELECT * FROM category_table")
+    @Query("SELECT * FROM category_table ORDER BY categoryId DESC")
     LiveData<List<Category>> getAllCategories();
 
     @Query("SELECT name FROM category_table")
     List<String> getAllCategoryName();
+
 }

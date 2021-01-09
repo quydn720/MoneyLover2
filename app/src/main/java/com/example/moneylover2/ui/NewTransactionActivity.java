@@ -10,14 +10,15 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.example.moneylover2.R;
+import com.example.moneylover2.model.Category;
 import com.example.moneylover2.model.Transaction;
-import com.example.moneylover2.viewmodel.CategoryViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.moneylover2.ui.MainActivity.ALL_CATEGORIES_TITLE;
 
 public class NewTransactionActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -28,8 +29,7 @@ public class NewTransactionActivity extends AppCompatActivity implements Adapter
 
     private String category;
     private int amount;
-
-    private CategoryViewModel categoryViewModel;
+    private List<Category> allCategories;
 
 
     @Override
@@ -37,7 +37,14 @@ public class NewTransactionActivity extends AppCompatActivity implements Adapter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_transaction);
 
-        categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
+        List<String> categoryList = new ArrayList<>();
+
+
+        Intent allCategoriesIntent = getIntent();
+        allCategories = (List<Category>) allCategoriesIntent.getSerializableExtra(ALL_CATEGORIES_TITLE);
+        for(Category category : allCategories){
+            categoryList.add(category.Name);
+        }
 
         editText_amount = findViewById(R.id.editText_amount);
 
@@ -47,8 +54,6 @@ public class NewTransactionActivity extends AppCompatActivity implements Adapter
             spinner_category.setOnItemSelectedListener(this);
         }
         // Test. TODO: lấy categoryList từ Database.
-        List<String> categoryList = new ArrayList<>();
-        //categoryViewModel.getAllCategoryName();
 
         categoryList.add("Family");
         categoryList.add("Coffee");

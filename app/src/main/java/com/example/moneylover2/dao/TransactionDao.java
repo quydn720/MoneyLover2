@@ -21,6 +21,7 @@ public interface TransactionDao {
     @Query("DELETE FROM transaction_table")
     void deleteAll();
 
-    @Query("SELECT * from transaction_table ORDER BY id DESC")
+    @Query("SELECT * from transaction_table ORDER BY transactionId DESC")
     LiveData<List<Transaction>> getAllTransactions();
+
 }

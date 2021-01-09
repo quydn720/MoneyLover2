@@ -15,6 +15,7 @@ public class TransactionViewModel extends AndroidViewModel {
     private TransactionRepository Repository;
     private LiveData<List<Transaction>> allTransactions;
 
+
     public TransactionViewModel(Application application) {
         super(application);
         Repository = new TransactionRepository(application);
@@ -28,6 +29,8 @@ public class TransactionViewModel extends AndroidViewModel {
     public void insert(Transaction word) {
         Repository.insert(word);
     }
+
+
 
 //    public void deleteAll() {
 //        Repository.deleteAll();

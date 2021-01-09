@@ -4,4 +4,7 @@
     <string name="action_category">Category</string>
     <string name="amount_hint">Amount</string>
     <string name="add_new_transaction">Add Transaction</string>
+    <string name="new_category_title">New Category Title</string>
+    <string name="add_new_category">Add new Category</string>
+    <string name="categories_title">Categories</string>
 </resources>
