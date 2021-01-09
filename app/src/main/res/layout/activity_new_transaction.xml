@@ -9,37 +9,43 @@
 
     <EditText
         android:id="@+id/editText_amount"
-        android:layout_width="wrap_content"
+        android:layout_width="175dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:ems="10"
-        android:hint="Amount"
+        android:hint="@string/amount_hint"
         android:inputType="number"
-        android:paddingLeft="16dp"
-        android:textSize="20sp"
+        android:maxLength="12"
+        android:singleLine="true"
+        android:textAlignment="textEnd"
+        android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/editText_category"
-        android:layout_width="147dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Category"
-        android:inputType="textPersonName"
-        android:paddingRight="16dp"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/editText_amount"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:importantForAutofill="no" />
 
     <Button
         android:id="@+id/button_save"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Save"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:onClick="returnTransaction"
+        android:text="@string/add_new_transaction"
+        android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_amount"
-        android:onClick="returnTransaction"/>
+        app:layout_constraintTop_toBottomOf="@+id/editText_amount" />
+
+    <Spinner
+        android:id="@+id/spinner_category"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:spinnerMode="dialog"
+        app:layout_constraintBottom_toTopOf="@+id/button_save"
+        app:layout_constraintEnd_toStartOf="@+id/editText_amount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
