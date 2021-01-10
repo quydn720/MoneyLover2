@@ -1,13 +1,14 @@
 package com.example.moneylover2.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,18 +17,11 @@ import com.example.moneylover2.adapter.CategoryListAdapter;
 import com.example.moneylover2.model.Category;
 import com.example.moneylover2.viewmodel.CategoryViewModel;
 
-import java.io.Serializable;
-import java.util.List;
-
 public class NewCategoryActivity extends AppCompatActivity {
-
-    public static final String ALL_CATEGORIES = "com.example.android.moneylover.ALL_CATEGORIES";
 
     private EditText editText_new_category;
 
     private CategoryViewModel categoryViewModel;
-
-    private List<Category> allCategories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,31 +37,42 @@ public class NewCategoryActivity extends AppCompatActivity {
 
         categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
 
-        // Update the cached copy of the words in the adapter.
-        categoryViewModel.getAllCategories().observe(this, categories -> {
-            adapter.setAllCategories(categories);
-            allCategories = categories;
-        });
-    }
+        //region Event - Swipe left to delete category
+        // Add the functionality to swipe items in the
+        // recycler view to delete that item
+        ItemTouchHelper helper = new ItemTouchHelper(
+                new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+                    @Override
+                    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                        return false;
+                    }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Intent intent = new Intent();
-        intent.putExtra(ALL_CATEGORIES, (Serializable) allCategories);
-        setResult(RESULT_OK, intent);
-        finish();
+                    @Override
+                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                        int position = viewHolder.getAdapterPosition();
+                        Category category = adapter.getCategoryAtPosition(position);
+                        Toast.makeText(NewCategoryActivity.this, "Deleting transaction...", Toast.LENGTH_SHORT).show();
+
+                        categoryViewModel.delete(category);
+                        // TODO: Bug: If user delete all the category, app must be restart to populate the default category
+                    }
+                }
+        );
+        helper.attachToRecyclerView(recyclerView);
+        //endregion
+
+        // Update the cached copy of the words in the adapter.
+        categoryViewModel.getAllCategories().observe(this, adapter::setAllCategories);
     }
 
     //region Event - Add new Category
     public void addNewCategory(View view) {
-
         try {
             String name = editText_new_category.getText().toString();
             Category category = new Category(name);
             categoryViewModel.insert(category);
         } catch (Exception e) {
-            Toast.makeText(this, "You must enter the category title", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "You must enter the category title", Toast.LENGTH_SHORT).show();
         }
     }
     //endregion

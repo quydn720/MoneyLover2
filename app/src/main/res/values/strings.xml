@@ -7,4 +7,5 @@
     <string name="new_category_title">New Category Title</string>
     <string name="add_new_category">Add new Category</string>
     <string name="categories_title">Categories</string>
+    <string name="action_test">Delete All Transactions</string>
 </resources>

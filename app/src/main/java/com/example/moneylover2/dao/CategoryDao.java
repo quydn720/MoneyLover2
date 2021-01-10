@@ -2,6 +2,7 @@ package com.example.moneylover2.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -20,4 +21,12 @@ public interface CategoryDao {
     @Query("SELECT * FROM category_table")
     List<Category> getAllCategoryName();
 
+    @Delete
+    void delete(Category category);
+
+    @Query("DELETE FROM category_table")
+    void deleteAll();
+
+    @Query("SELECT * from category_table LIMIT 1")
+    Category[] getAnyCategory();
 }

@@ -1,6 +1,7 @@
 package com.example.moneylover2.repository;
 
 import android.app.Application;
+import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
@@ -16,14 +17,14 @@ public class CategoryRepository {
     private LiveData<List<Category>> allCategories;
     private List<Category> allCategoryName;
 
-    public CategoryRepository(Application application){
+    public CategoryRepository(Application application) {
         TransactionDatabase db = TransactionDatabase.getDatabase(application);
 
         categoryDao = db.categoryDao();
     }
 
-    public void insert(Category category){
-        TransactionDatabase.databaseWriteExecutor.execute(()-> categoryDao.insert(category));
+    public void insert(Category category) {
+        TransactionDatabase.databaseWriteExecutor.execute(() -> categoryDao.insert(category));
     }
 
     public LiveData<List<Category>> getAllCategories() {
@@ -31,9 +32,48 @@ public class CategoryRepository {
         return allCategories;
     }
 
-    public List<Category> getAllCategoryName(){
+    public List<Category> getAllCategoryName() {
         allCategoryName = categoryDao.getAllCategoryName();
         return allCategoryName;
+    }
+
+    public void deleteAll() {
+        new CategoryRepository.deleteAllCategoriesAsyncTask(categoryDao).execute();
+    }
+
+    public void delete(Category category) {
+        new CategoryRepository.deleteCategoryAsyncTask(categoryDao).execute(category);
+    }
+
+    // to do the delete asynchronous
+    private static class deleteAllCategoriesAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private CategoryDao categoryDao;
+
+        deleteAllCategoriesAsyncTask(CategoryDao dao) {
+            this.categoryDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            categoryDao.deleteAll();
+            return null;
+        }
+    }
+
+    private static class deleteCategoryAsyncTask extends AsyncTask<Category, Void, Void> {
+
+        private CategoryDao categoryDao;
+
+        deleteCategoryAsyncTask(CategoryDao dao) {
+            this.categoryDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final Category... params) {
+            categoryDao.delete(params[0]);
+            return null;
+        }
     }
 
 }

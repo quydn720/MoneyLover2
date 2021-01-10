@@ -31,15 +31,14 @@ public class TransactionViewModel extends AndroidViewModel {
     }
 
 
+    public void deleteAll() {
+        Repository.deleteAll();
+    }
 
-//    public void deleteAll() {
-//        Repository.deleteAll();
-//    }
+    public void deleteTransaction(Transaction transaction) {
+        Repository.delete(transaction);
+    }
 
-//    public void deleteWord(Transaction word) {
-//        mRepository.deleteWord(word);
-//    }
-//
 //    public void update(Transaction word) {
 //        mRepository.update(word);
 //    }

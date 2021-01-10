@@ -28,8 +28,18 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 
         private CategoryViewHolder(View itemView) {
             super(itemView);
-            categoryItemView = itemView.findViewById(R.id.textView6);
+            categoryItemView = itemView.findViewById(R.id.textView_category_title);
         }
+
+    }
+
+    public void setAllCategories(List<Category> categories) {
+        allCategories = categories;
+        notifyDataSetChanged();
+    }
+
+    public Category getCategoryAtPosition(int position){
+        return allCategories.get(position);
     }
 
     @NonNull
@@ -38,12 +48,6 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         View itemView = mInflater.inflate(R.layout.recyclerview_category, parent, false);
         return new CategoryViewHolder(itemView);
     }
-
-    public void setAllCategories(List<Category> categories) {
-        allCategories = categories;
-        notifyDataSetChanged();
-    }
-
 
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {

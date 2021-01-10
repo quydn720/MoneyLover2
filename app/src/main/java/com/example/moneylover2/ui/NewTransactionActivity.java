@@ -16,7 +16,6 @@ import com.example.moneylover2.model.Category;
 import com.example.moneylover2.model.Transaction;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.example.moneylover2.ui.MainActivity.ALL_CATEGORY_NAME;
@@ -40,16 +39,14 @@ public class NewTransactionActivity extends AppCompatActivity implements Adapter
         //region Initialize, Populate the allCategoryName for Spinner
         List<String> categoryNameList = new ArrayList<>();
 
-        // Populate with the default - resource
-        String[] defaultCategoryName = getResources().getStringArray(R.array.default_categories_list);
-        categoryNameList.addAll(Arrays.asList(defaultCategoryName));
-
         // Get all the category name from the intent
         Intent allCategoriesIntent = getIntent();
         allCategoryName = (List<Category>) allCategoriesIntent.getSerializableExtra(ALL_CATEGORY_NAME);
+
         for (Category category : allCategoryName) {
             categoryNameList.add(category.Name);
         }
+
         //endregion
 
         editText_amount = findViewById(R.id.editText_amount);

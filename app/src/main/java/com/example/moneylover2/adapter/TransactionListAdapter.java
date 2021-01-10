@@ -48,6 +48,10 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         notifyDataSetChanged();
     }
 
+    public Transaction getTransactionAtPosition(int position){
+        return transactionList.get(position);
+    }
+
     @Override
     public int getItemCount() {
         if (transactionList != null)

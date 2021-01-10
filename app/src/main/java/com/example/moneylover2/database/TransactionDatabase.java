@@ -1,10 +1,13 @@
 package com.example.moneylover2.database;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.moneylover2.dao.CategoryDao;
 import com.example.moneylover2.dao.TransactionDao;
@@ -41,12 +44,49 @@ public abstract class TransactionDatabase extends RoomDatabase {
                             // Wipes and rebuilds instead of migrating if no Migration object.
                             // Migration is not part of this practical.
 //                            .fallbackToDestructiveMigration()
-//                            .addCallback(sRoomDatabaseCallback)
+                            .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
             }
         }
         return INSTANCE;
+    }
+
+    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
+        @Override
+        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+            super.onOpen(db);
+            new PopulateDbAsync(INSTANCE).execute();
+        }
+    };
+
+    /**
+     * Populate the database in the background.
+     */
+    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
+
+        private final CategoryDao dao;
+        String[] defaultCategoryName = {"Family", "Food & Beverages", "Health & Fitness", "Entertainment", "Others", "Education", "Shopping"};
+
+        PopulateDbAsync(TransactionDatabase db) {
+            dao = db.categoryDao();
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            // Start the app with a clean database every time.
+            // Not needed if you only populate the database
+            // when it is first created
+            //dao.deleteAll();
+
+            if (dao.getAnyCategory().length < 1) {
+                for (String s : defaultCategoryName) {
+                    Category category = new Category(s);
+                    dao.insert(category);
+                }
+            }
+            return null;
+        }
     }
 
 
