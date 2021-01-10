@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="categories_list" >
-        <item>Coffee</item>
+    <string-array name="default_categories_list" >
+        <item>Food &amp; Beverage</item>
         <item>Family</item>
-        <item>Health</item>
+        <item>Health &amp; Fitness</item>
+        <item>Entertainment</item>
+        <item>Others </item>
+        <item>Education</item>
+        <item>Friends &amp; Lover</item>
         <item>Shopping</item>
+        <item>Transportation</item>
+        <item>Bills &amp; Utilities</item>
+        <item>Gift &amp; Donations</item>
     </string-array>
 </resources>

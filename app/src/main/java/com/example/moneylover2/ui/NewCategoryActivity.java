@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -49,21 +50,26 @@ public class NewCategoryActivity extends AppCompatActivity {
         });
     }
 
-    public void addNewCategory(View view) {
-
-//        try {
-        String name = editText_new_category.getText().toString();
-        Category category = new Category(name);
-        categoryViewModel.insert(category);
-
+    @Override
+    protected void onPause() {
+        super.onPause();
         Intent intent = new Intent();
         intent.putExtra(ALL_CATEGORIES, (Serializable) allCategories);
         setResult(RESULT_OK, intent);
         finish();
-//
-//        } catch (Exception e) {
-//            Toast.makeText(this, "You must enter the category title", Toast.LENGTH_LONG).show();
-//        }
     }
+
+    //region Event - Add new Category
+    public void addNewCategory(View view) {
+
+        try {
+            String name = editText_new_category.getText().toString();
+            Category category = new Category(name);
+            categoryViewModel.insert(category);
+        } catch (Exception e) {
+            Toast.makeText(this, "You must enter the category title", Toast.LENGTH_LONG).show();
+        }
+    }
+    //endregion
 
 }

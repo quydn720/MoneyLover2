@@ -15,7 +15,7 @@ public class CategoryViewModel extends AndroidViewModel {
 
     private CategoryRepository Repository;
     private LiveData<List<Category>> allCategories;
-    private List<String> allCategoryName;
+    private List<Category> allCategoryName;
 
     public CategoryViewModel(@NonNull Application application) {
         super(application);
@@ -31,7 +31,7 @@ public class CategoryViewModel extends AndroidViewModel {
         return allCategories;
     }
 
-    public List<String> getAllCategoryName() {
+    public List<Category> getAllCategoryName() {
         allCategoryName = Repository.getAllCategoryName();
         return allCategoryName;
     }

@@ -17,23 +17,37 @@ import com.example.moneylover2.R;
 import com.example.moneylover2.adapter.TransactionListAdapter;
 import com.example.moneylover2.model.Category;
 import com.example.moneylover2.model.Transaction;
+import com.example.moneylover2.viewmodel.CategoryViewModel;
 import com.example.moneylover2.viewmodel.TransactionViewModel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.moneylover2.ui.NewCategoryActivity.ALL_CATEGORIES;
-import static com.example.moneylover2.ui.NewTransactionActivity.EXTRA_TRANSACTION;
+import static com.example.moneylover2.ui.NewTransactionActivity.NEW_TRANSACTION;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final int NEW_TRANSACTION_ACTIVITY_REQUEST_CODE = 1;
     private static final int ALL_CATEGORIES_ACTIVITY_REQUEST_CODE = 2;
-    public static final String ALL_CATEGORIES_TITLE =  "com.example.android.moneylover.extra.ALL_CATEGORIES";
+    public static final String ALL_CATEGORY_NAME = "com.example.android.moneylover.extra.ALL_CATEGORIES_NAME";
 
     private TextView textView;
     private TransactionViewModel transactionViewModel;
-    private List<Category> categoryList;
+    private CategoryViewModel categoryViewModel;
+
+    private List<Category> categoryList = new ArrayList<>();
+    private List<Category> categoryList_withNewCategory;
+    private List<Category> categoryNameList;
+
+    public List<Category> getCategoryList_withNewCategory() {
+        return categoryList_withNewCategory;
+    }
+
+    public void setCategoryList_withNewCategory(List<Category> categoryList_withNewCategory) {
+        this.categoryList_withNewCategory = categoryList_withNewCategory;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +58,11 @@ public class MainActivity extends AppCompatActivity {
 
         textView = findViewById(R.id.textView);
 
+        categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
+
         transactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
 
+        // Initialize, Populate RecyclerView of Transactions
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
         final TransactionListAdapter adapter = new TransactionListAdapter(this);
         recyclerView.setAdapter(adapter);
@@ -53,11 +70,21 @@ public class MainActivity extends AppCompatActivity {
 
         // Update the cached copy of the words in the adapter.
         transactionViewModel.getAllTransactions().observe(this, adapter::setTransactions);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (getCategoryList_withNewCategory() != null) {
+            categoryList.addAll(categoryList_withNewCategory);
+        }
     }
 
     public void addNewTransaction(View view) {
         Intent intent = new Intent(MainActivity.this, NewTransactionActivity.class);
-        intent.putExtra(ALL_CATEGORIES_TITLE, (Serializable) categoryList);
+        categoryNameList = categoryViewModel.getAllCategoryName();
+        intent.putExtra(ALL_CATEGORY_NAME, (Serializable) categoryNameList);
         startActivityForResult(intent, NEW_TRANSACTION_ACTIVITY_REQUEST_CODE);
     }
 
@@ -90,12 +117,11 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == NEW_TRANSACTION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
 
-            Transaction transaction = (Transaction) data.getSerializableExtra(EXTRA_TRANSACTION);
+            Transaction transaction = (Transaction) data.getSerializableExtra(NEW_TRANSACTION);
             transactionViewModel.insert((transaction));
-        }
-        else if (requestCode == ALL_CATEGORIES_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-
-             categoryList = (List<Category>) data.getSerializableExtra(ALL_CATEGORIES);
+        } else if (requestCode == ALL_CATEGORIES_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            setCategoryList_withNewCategory((List<Category>) data.getSerializableExtra(ALL_CATEGORIES));
         }
     }
+
 }

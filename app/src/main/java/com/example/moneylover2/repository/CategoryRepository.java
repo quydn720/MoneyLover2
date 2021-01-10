@@ -14,7 +14,7 @@ public class CategoryRepository {
 
     private CategoryDao categoryDao;
     private LiveData<List<Category>> allCategories;
-    private List<String> allCategoryName;
+    private List<Category> allCategoryName;
 
     public CategoryRepository(Application application){
         TransactionDatabase db = TransactionDatabase.getDatabase(application);
@@ -31,7 +31,7 @@ public class CategoryRepository {
         return allCategories;
     }
 
-    public List<String> getAllCategoryName(){
+    public List<Category> getAllCategoryName(){
         allCategoryName = categoryDao.getAllCategoryName();
         return allCategoryName;
     }

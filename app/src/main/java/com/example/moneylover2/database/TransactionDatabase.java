@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {Transaction.class, Category.class},
-        version = 2, exportSchema = false)
+        version = 3, exportSchema = false)
 public abstract class TransactionDatabase extends RoomDatabase {
 
     public abstract TransactionDao transactionDao();
@@ -37,6 +37,7 @@ public abstract class TransactionDatabase extends RoomDatabase {
                     // Create database here.
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             TransactionDatabase.class, "moneylover_database")
+                            .allowMainThreadQueries()
                             // Wipes and rebuilds instead of migrating if no Migration object.
                             // Migration is not part of this practical.
 //                            .fallbackToDestructiveMigration()
