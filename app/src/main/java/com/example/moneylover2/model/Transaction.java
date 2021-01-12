@@ -1,6 +1,5 @@
 package com.example.moneylover2.model;
 
-import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -20,18 +19,21 @@ public class Transaction implements Serializable {
     @ColumnInfo(name = "amount")
     public int Amount;
 
+    @ColumnInfo(name = "date_created")
+    public String DateCreated;
+
     public Transaction(){
 
     }
+//
+//    public Transaction(String category, int amount) {
+//        Category = category;
+//        Amount = amount;
+//    }
 
-    public Transaction(String category, int amount) {
+    public Transaction(String category, int amount, String dateCreated) {
         Category = category;
         Amount = amount;
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return Category + "\t" + Amount;
+        DateCreated = dateCreated;
     }
 }

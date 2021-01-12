@@ -1,35 +1,48 @@
 package com.example.moneylover2.ui;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import com.example.moneylover2.R;
 import com.example.moneylover2.model.Category;
 import com.example.moneylover2.model.Transaction;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static com.example.moneylover2.ui.MainActivity.ALL_CATEGORY_NAME;
 
-public class NewTransactionActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class NewTransactionActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatePickerDialog.OnDateSetListener{
 
     public static final String NEW_TRANSACTION = "com.example.android.moneylover.NEW_TRANSACTION";
 
     private EditText editText_amount;
+    private TextView textView_dateCreated;
     private Spinner spinner_category;
     private List<Category> allCategoryName;
+
     private String category;
     private int amount;
-
+    private String dateToDisplay;
+    private String dateToDbSave;
+    DateFormat df = new SimpleDateFormat("ddMMyyyy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +63,14 @@ public class NewTransactionActivity extends AppCompatActivity implements Adapter
         //endregion
 
         editText_amount = findViewById(R.id.editText_amount);
+        textView_dateCreated = findViewById(R.id.textView_dateCreated);
+
+        // Nếu user không chọn ngày khác
+        Date d = Calendar.getInstance().getTime();
+        dateToDisplay = DateFormat.getDateInstance(DateFormat.FULL).format(d);
+        dateToDbSave = dateToDisplay;
+        dateToDbSave = df.format(d);
+        textView_dateCreated.setText(dateToDisplay);
 
         //region Initialize the Spinner, populate it with (allCategoryName) variable
 
@@ -74,8 +95,7 @@ public class NewTransactionActivity extends AppCompatActivity implements Adapter
         // TODO: Viết Hàm format string để hiển thị tiền tệ khi nhập....vd: 1000 => 1,000
         try {
             amount = Integer.parseInt(editText_amount.getText().toString());
-
-            Transaction transaction = new Transaction(category, amount);
+            Transaction transaction = new Transaction(category, amount, dateToDbSave);
             Intent replyIntent = new Intent();
             replyIntent.putExtra(NEW_TRANSACTION, transaction);
             setResult(RESULT_OK, replyIntent);
@@ -89,6 +109,13 @@ public class NewTransactionActivity extends AppCompatActivity implements Adapter
     }
     //endregion
 
+    //region Event - Show the DatePickerDiaglog
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+    //endregion
+
     //region Event - Select the item on the Spinner
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -99,5 +126,36 @@ public class NewTransactionActivity extends AppCompatActivity implements Adapter
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
     //endregion
+
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, month);
+        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        Date d = c.getTime();
+
+        dateToDisplay = DateFormat.getDateInstance(DateFormat.FULL).format(d);
+        textView_dateCreated.setText(dateToDisplay);
+
+        dateToDbSave = df.format(d);
+    }
+
+    public static class DatePickerFragment extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(getActivity(), (DatePickerDialog.OnDateSetListener) getActivity(), year, month, day);
+        }
+    }
 }

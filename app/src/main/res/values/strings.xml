@@ -8,4 +8,7 @@
     <string name="add_new_category">Add new Category</string>
     <string name="categories_title">Categories</string>
     <string name="action_test">Delete All Transactions</string>
+    <string name="fab_description">Add new Transaction</string>
+    <string name="left_arrow"><![CDATA[<------]]></string>
+    <string name="right_arrow"><![CDATA[------>]]></string>
 </resources>

@@ -7,15 +7,32 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:paddingBottom="10dp">
+
+        <TextView
+            android:id="@+id/textView_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@color/teal_200"
+            android:paddingStart="8dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="2dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView_category"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:background="@android:color/holo_orange_light"
             android:paddingStart="8dp"
             android:paddingTop="5dp"
@@ -25,13 +42,12 @@
             android:textSize="22sp"
             app:layout_constraintEnd_toStartOf="@+id/textView_amount"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_date" />
 
         <TextView
             android:id="@+id/textView_amount"
             android:layout_width="175dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:background="@android:color/holo_orange_light"
             android:paddingStart="8dp"
@@ -42,6 +58,6 @@
             android:textAlignment="textEnd"
             android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_date" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

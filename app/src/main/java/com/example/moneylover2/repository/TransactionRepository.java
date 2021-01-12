@@ -22,6 +22,7 @@ public class TransactionRepository {
         transactionDao = db.transactionDao();
     }
 
+    // TODO: Insert Async
     public void insert(Transaction transaction) {
         TransactionDatabase.databaseWriteExecutor.execute(() -> transactionDao.insert(transaction));
     }
@@ -31,21 +32,25 @@ public class TransactionRepository {
         return allTransactions;
     }
 
-    public void deleteAll()  {
+    public void deleteAll() {
         new deleteAllTransactionsAsyncTask(transactionDao).execute();
     }
 
-    public void delete(Transaction transaction){
+    public void delete(Transaction transaction) {
         new deleteTransactionAsyncTask(transactionDao).execute(transaction);
     }
 
+    public LiveData<List<Transaction>> getAllTransactionsByDateCreated(String date) {
+        allTransactions = transactionDao.getAllTransactionsByDateCreated(date);
+        return allTransactions;
+    }
 
     // to do the delete asynchronous
-    private static class deleteAllTransactionsAsyncTask extends AsyncTask<Void, Void, Void>{
+    private static class deleteAllTransactionsAsyncTask extends AsyncTask<Void, Void, Void> {
 
         private TransactionDao transactionDao;
 
-        deleteAllTransactionsAsyncTask(TransactionDao dao){
+        deleteAllTransactionsAsyncTask(TransactionDao dao) {
             this.transactionDao = dao;
         }
 
@@ -56,11 +61,11 @@ public class TransactionRepository {
         }
     }
 
-    private static class deleteTransactionAsyncTask extends AsyncTask<Transaction, Void, Void>{
+    private static class deleteTransactionAsyncTask extends AsyncTask<Transaction, Void, Void> {
 
         private TransactionDao transactionDao;
 
-        deleteTransactionAsyncTask(TransactionDao dao){
+        deleteTransactionAsyncTask(TransactionDao dao) {
             this.transactionDao = dao;
         }
 

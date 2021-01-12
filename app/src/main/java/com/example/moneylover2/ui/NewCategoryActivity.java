@@ -1,6 +1,7 @@
 package com.example.moneylover2.ui;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -67,13 +68,17 @@ public class NewCategoryActivity extends AppCompatActivity {
 
     //region Event - Add new Category
     public void addNewCategory(View view) {
-        try {
-            String name = editText_new_category.getText().toString();
-            Category category = new Category(name);
-            categoryViewModel.insert(category);
-        } catch (Exception e) {
+
+        String name = editText_new_category.getText().toString();
+
+        if (TextUtils.isEmpty(name)) {
             Toast.makeText(this, "You must enter the category title", Toast.LENGTH_SHORT).show();
         }
+        else {
+            Category category = new Category(name);
+            categoryViewModel.insert(category);
+        }
+
     }
     //endregion
 

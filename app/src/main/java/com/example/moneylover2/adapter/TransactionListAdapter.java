@@ -12,12 +12,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.moneylover2.R;
 import com.example.moneylover2.model.Transaction;
 
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class TransactionListAdapter extends RecyclerView.Adapter<TransactionListAdapter.TransactionViewHolder> {
 
     private final LayoutInflater mInflater;
     private List<Transaction> transactionList; // Cached copy of words
+    private static final Locale l = new Locale("vi", "VN");
 
     public TransactionListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
@@ -35,11 +40,8 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         if (transactionList != null) {
             Transaction current = transactionList.get(position);
             holder.textView_category.setText(current.Category);
-            holder.textView_amount.setText(current.Amount + "");
-        } else {
-            // Covers the case of data not being ready yet.
-            holder.textView_amount.setText("No amount");
-            holder.textView_category.setText("No category");
+            holder.textView_amount.setText(CurrencyFormat(current.Amount));
+            holder.textView_date.setText(StringToDateFormat(current.DateCreated));
         }
     }
 
@@ -48,7 +50,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         notifyDataSetChanged();
     }
 
-    public Transaction getTransactionAtPosition(int position){
+    public Transaction getTransactionAtPosition(int position) {
         return transactionList.get(position);
     }
 
@@ -61,14 +63,34 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
 
     public class TransactionViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView textView_amount, textView_category;
+        private final TextView textView_amount, textView_category, textView_date;
 
         public TransactionViewHolder(@NonNull View itemView) {
             super(itemView);
 
             textView_amount = itemView.findViewById(R.id.textView_amount);
             textView_category = itemView.findViewById(R.id.textView_category);
+            textView_date = itemView.findViewById(R.id.textView_date);
         }
     }
+
+
+    // Helper method
+    public static String StringToDateFormat(String s) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.DAY_OF_YEAR, Integer.parseInt(s.substring(0, 2)));
+        c.set(Calendar.MONTH, Integer.parseInt(s.substring(2, 4)));
+        c.set(Calendar.YEAR, Integer.parseInt(s.substring(4, 8)));
+
+//        Date d = c.getTime();
+        return DateFormat.getDateInstance(DateFormat.FULL, l).format(c.getTime());
+    }
+
+    // Tham số Locale cho phép người dùng có thể thay đổi đơn vị tiền tệ
+    public static String CurrencyFormat(int i) {
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(l);
+        return numberFormat.format(i);
+    }
+
 
 }

@@ -2,6 +2,8 @@ package com.example.moneylover2.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +26,12 @@ import com.example.moneylover2.viewmodel.CategoryViewModel;
 import com.example.moneylover2.viewmodel.TransactionViewModel;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static com.example.moneylover2.ui.NewTransactionActivity.NEW_TRANSACTION;
 
@@ -34,8 +41,17 @@ public class MainActivity extends AppCompatActivity {
     public static final String ALL_CATEGORY_NAME = "com.example.android.moneylover.extra.ALL_CATEGORIES_NAME";
 
     private TextView textView;
+    private TextView textView_current_date;
     private TransactionViewModel transactionViewModel;
     private CategoryViewModel categoryViewModel;
+    private TextView textView_left_arrow;
+    private TextView textView_right_arrow;
+    private Calendar c = Calendar.getInstance();
+    private Date d = c.getTime();
+    private DateFormat df = new SimpleDateFormat("ddMMyyyy");
+    private String dateToDbQuery = df.format(d);
+    private TransactionListAdapter adapter;
+    private Locale l;
 
     private List<Category> categoryNameList;
 
@@ -48,14 +64,38 @@ public class MainActivity extends AppCompatActivity {
 
         textView = findViewById(R.id.textView);
 
+        l = new Locale("vi", "VN");
+
         categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
 
         transactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
 
+        textView_current_date = findViewById(R.id.textView_current_date);
+        textView_current_date.setText(DateFormat.getDateInstance(DateFormat.FULL, l).format(d));
+        // Event - change the date
+        textView_current_date.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                transactionViewModel.getAllTransactionsByDateCreated(dateToDbQuery).observe(MainActivity.this, adapter::setTransactions);
+            }
+        });
+
+        textView_left_arrow = findViewById(R.id.textView_left_arrow);
+        textView_right_arrow = findViewById(R.id.textView_right_arrow);
 
         // Initialize, Populate RecyclerView of Transactions
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        final TransactionListAdapter adapter = new TransactionListAdapter(this);
+        adapter = new TransactionListAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -83,11 +123,11 @@ public class MainActivity extends AppCompatActivity {
         //endregion
 
         // Update the cached copy of the words in the adapter.
-        transactionViewModel.getAllTransactions().observe(this, adapter::setTransactions);
-
+        transactionViewModel.getAllTransactionsByDateCreated(dateToDbQuery).observe(this, adapter::setTransactions);
     }
 
     public void addNewTransaction(View view) {
+
         Intent intent = new Intent(MainActivity.this, NewTransactionActivity.class);
         categoryNameList = categoryViewModel.getAllCategoryName();
         intent.putExtra(ALL_CATEGORY_NAME, (Serializable) categoryNameList);
@@ -135,5 +175,18 @@ public class MainActivity extends AppCompatActivity {
             transactionViewModel.insert((transaction));
         }
     }
+
+    //region Event - change the date
+    public void showPreviousDay(View view) {
+        c.add(Calendar.DATE, -1);
+        dateToDbQuery = df.format(c.getTime());
+        textView_current_date.setText(DateFormat.getDateInstance(DateFormat.FULL, l).format(c.getTime()));
+    }
+    public void showNextDay(View view) {
+        c.add(Calendar.DATE, 1);
+        dateToDbQuery = df.format(c.getTime());
+        textView_current_date.setText(DateFormat.getDateInstance(DateFormat.FULL, l).format(c.getTime()));
+    }
+    //endregion
 
 }

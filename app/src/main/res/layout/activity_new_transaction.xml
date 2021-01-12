@@ -28,13 +28,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:onClick="returnTransaction"
         android:text="@string/add_new_transaction"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_amount" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_dateCreated" />
 
     <Spinner
         android:id="@+id/spinner_category"
@@ -42,10 +43,39 @@
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:spinnerMode="dialog"
-        app:layout_constraintBottom_toTopOf="@+id/button_save"
+        app:layout_constraintBottom_toTopOf="@+id/textView_dateCreated"
         app:layout_constraintEnd_toStartOf="@+id/editText_amount"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_dateCreated"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@+id/button_save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_date_picker"
+        app:layout_constraintTop_toBottomOf="@+id/editText_amount" />
+
+    <ImageButton
+        android:id="@+id/button_date_picker"
+        android:layout_width="55dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/fab_description"
+        android:onClick="showDatePickerDialog"
+        app:layout_constraintBottom_toTopOf="@+id/button_save"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_category"
+        app:srcCompat="@drawable/ic_baseline_calendar_today_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -39,6 +39,11 @@ public class TransactionViewModel extends AndroidViewModel {
         Repository.delete(transaction);
     }
 
+    public LiveData<List<Transaction>> getAllTransactionsByDateCreated(String date) {
+        allTransactions = Repository.getAllTransactionsByDateCreated(date);
+        return allTransactions;
+    }
+
 //    public void update(Transaction word) {
 //        mRepository.update(word);
 //    }

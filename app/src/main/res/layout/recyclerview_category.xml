@@ -3,13 +3,15 @@
     "http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/teal_200">
 
     <TextView
         android:id="@+id/textView_category_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
+        android:background="@android:color/holo_orange_light"
         android:padding="8dp"
         android:textSize="20sp"
         tools:text="placeholder text" />
