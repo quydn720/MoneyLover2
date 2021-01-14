@@ -16,10 +16,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:singleSelection="true"
-        app:checkedButton="@id/button1">
+        app:selectionRequired="true"
+        app:checkedButton="@id/button_outcome">
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/button_outcome"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
@@ -27,7 +28,7 @@
             android:textAllCaps="false" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/button_income"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="150dp"
             android:layout_height="wrap_content"

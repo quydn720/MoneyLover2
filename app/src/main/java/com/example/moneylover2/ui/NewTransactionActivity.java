@@ -15,20 +15,19 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.moneylover2.R;
-import com.example.moneylover2.model.Category;
 import com.example.moneylover2.model.Transaction;
+import com.example.moneylover2.viewmodel.CategoryViewModel;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static com.example.moneylover2.ui.MainActivity.ALL_CATEGORY_NAME;
+import static com.example.moneylover2.ui.MainActivity.df;
 
 public class NewTransactionActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatePickerDialog.OnDateSetListener {
 
@@ -37,32 +36,19 @@ public class NewTransactionActivity extends AppCompatActivity implements Adapter
     private EditText editText_amount;
     private TextView textView_dateCreated;
     private Spinner spinner_category;
-    private List<Category> allCategoryName;
     private MaterialButtonToggleGroup toggleButton;
 
     private String category;
     private int amount;
     private String dateToDisplay;
     private String dateToDbSave;
-    DateFormat df = new SimpleDateFormat("ddMMyyyy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_transaction);
 
-        //region Initialize, Populate the allCategoryName for Spinner
-        List<String> categoryNameList = new ArrayList<>();
-
-        // Get all the category name from the intent
-        Intent allCategoriesIntent = getIntent();
-        allCategoryName = (List<Category>) allCategoriesIntent.getSerializableExtra(ALL_CATEGORY_NAME);
-
-        for (Category category : allCategoryName) {
-            categoryNameList.add(category.Name);
-        }
-
-        //endregion
+        CategoryViewModel categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
 
         editText_amount = findViewById(R.id.editText_amount);
         toggleButton = findViewById(R.id.toggleButton);
@@ -82,7 +68,7 @@ public class NewTransactionActivity extends AppCompatActivity implements Adapter
         if (spinner_category != null) {
             spinner_category.setOnItemSelectedListener(this);
         }
-
+        List<String> categoryNameList = categoryViewModel.getAllCategoryName();
         // Create an ArrayAdapter using the string array and default spinner layout.
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, categoryNameList);
 
@@ -98,10 +84,10 @@ public class NewTransactionActivity extends AppCompatActivity implements Adapter
         // TODO: Viết Hàm format string để hiển thị tiền tệ khi nhập....vd: 1000 => 1,000
         try {
             amount = Integer.parseInt(editText_amount.getText().toString());
-            String type = "income";
-            if (toggleButton.getCheckedButtonId() == R.id.button2) {
-                type = "outcome";
-            }
+            String type = toggleButton.getCheckedButtonId() == R.id.button_income ? "income" : "outcome";
+//            if (toggleButton.getCheckedButtonId() == R.id.button_income) {
+//                type = "income";
+//            }
             Transaction transaction = new Transaction(category, type, amount, dateToDbSave);
             Intent replyIntent = new Intent();
             replyIntent.putExtra(NEW_TRANSACTION, transaction);

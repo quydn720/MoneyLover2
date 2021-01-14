@@ -43,7 +43,7 @@ public abstract class TransactionDatabase extends RoomDatabase {
                             .allowMainThreadQueries()
                             // Wipes and rebuilds instead of migrating if no Migration object.
                             // Migration is not part of this practical.
-//                            .fallbackToDestructiveMigration()
+                            .fallbackToDestructiveMigration()
                             .addCallback(sRoomDatabaseCallback)
                             .build();
                 }

@@ -18,8 +18,8 @@ public interface CategoryDao {
     @Query("SELECT * FROM category_table ORDER BY categoryId DESC")
     LiveData<List<Category>> getAllCategories();
 
-    @Query("SELECT * FROM category_table")
-    List<Category> getAllCategoryName();
+    @Query("SELECT name FROM category_table")
+    List<String> getAllCategoryName();
 
     @Delete
     void delete(Category category);

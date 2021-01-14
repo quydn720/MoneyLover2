@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="default_categories_list" >
+    <string-array name="default_outcome_categories_list" >
         <item>Food &amp; Beverage</item>
         <item>Family</item>
         <item>Health &amp; Fitness</item>
-<!--        <item>Entertainment,Others,Education,Shopping </item>-->
-<!--        <item>Others </item>-->
-<!--        <item>Education</item>-->
-<!--        <item>Friends &amp; Lover</item>-->
-<!--        <item>Shopping</item>-->
-<!--        <item>Transportation</item>-->
-<!--        <item>Bills &amp; Utilities</item>-->
-<!--        <item>Gift &amp; Donations</item>-->
+        <item>Entertainment</item>
+        <item>Education</item>
+        <item>Friends &amp; Lover</item>
+        <item>Shopping</item>
+        <item>Transportation</item>
+        <item>Bills &amp; Utilities</item>
+        <item>Gift &amp; Donations</item>
+        <item>Others</item>
+    </string-array>
+
+    <string-array name="default_income_categories_list">
+        <item>Selling</item>
+        <item>Gifts</item>
+        <item>Awards</item>
+        <item>Salary</item>
+        <item>Others</item>
+
     </string-array>
 </resources>

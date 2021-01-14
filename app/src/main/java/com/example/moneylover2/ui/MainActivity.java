@@ -25,7 +25,6 @@ import com.example.moneylover2.model.Transaction;
 import com.example.moneylover2.viewmodel.CategoryViewModel;
 import com.example.moneylover2.viewmodel.TransactionViewModel;
 
-import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -39,21 +38,18 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int NEW_TRANSACTION_ACTIVITY_REQUEST_CODE = 1;
     public static final String ALL_CATEGORY_NAME = "com.example.android.moneylover.extra.ALL_CATEGORIES_NAME";
+    public static final DateFormat df = new SimpleDateFormat("ddMMyyyy");
 
     private TextView textView;
     private TextView textView_current_date;
     private TransactionViewModel transactionViewModel;
-    private CategoryViewModel categoryViewModel;
-    private TextView textView_left_arrow;
-    private TextView textView_right_arrow;
+
     private Calendar c = Calendar.getInstance();
     private Date d = c.getTime();
-    private DateFormat df = new SimpleDateFormat("ddMMyyyy");
     private String dateToDbQuery = df.format(d);
     private TransactionListAdapter adapter;
     private Locale l;
 
-    private List<Category> categoryNameList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
 
         l = new Locale("vi", "VN");
 
-        categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
 
         transactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
 
@@ -90,8 +85,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        textView_left_arrow = findViewById(R.id.textView_left_arrow);
-        textView_right_arrow = findViewById(R.id.textView_right_arrow);
 
         // Initialize, Populate RecyclerView of Transactions
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
@@ -129,8 +122,6 @@ public class MainActivity extends AppCompatActivity {
     public void addNewTransaction(View view) {
 
         Intent intent = new Intent(MainActivity.this, NewTransactionActivity.class);
-        categoryNameList = categoryViewModel.getAllCategoryName();
-        intent.putExtra(ALL_CATEGORY_NAME, (Serializable) categoryNameList);
         startActivityForResult(intent, NEW_TRANSACTION_ACTIVITY_REQUEST_CODE);
     }
 
@@ -166,10 +157,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.action_report){
             Intent intent = new Intent(MainActivity.this, ShowReportActivity.class);
-            int income = transactionViewModel.getTotalByType("income");
-            int outcome = transactionViewModel.getTotalByType("outcome");
-            int[] array = {income, outcome};
-            intent.putExtra("chart", array);
             startActivity(intent);
             return true;
         }

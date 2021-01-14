@@ -1,12 +1,13 @@
 package com.example.moneylover2.ui;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.moneylover2.R;
+import com.example.moneylover2.viewmodel.TransactionViewModel;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -24,15 +25,16 @@ public class ShowReportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_report);
 
-
-
         setPieChart();
     }
 
     public void setPieChart() {
 
-        Intent intent = getIntent();
-        int[] chartNumber = intent.getIntArrayExtra("chart");
+        TransactionViewModel transactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
+
+        int income = transactionViewModel.getTotalByType("income");
+        int outcome = transactionViewModel.getTotalByType("outcome");
+        int[] chartNumber = {income, outcome};
 
         this.pieChart = findViewById(R.id.pieChart);
         pieChart.getDescription().setEnabled(true);
