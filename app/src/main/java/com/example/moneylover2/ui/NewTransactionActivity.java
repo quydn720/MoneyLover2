@@ -19,6 +19,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.moneylover2.R;
 import com.example.moneylover2.model.Category;
 import com.example.moneylover2.model.Transaction;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -29,7 +30,7 @@ import java.util.List;
 
 import static com.example.moneylover2.ui.MainActivity.ALL_CATEGORY_NAME;
 
-public class NewTransactionActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatePickerDialog.OnDateSetListener{
+public class NewTransactionActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatePickerDialog.OnDateSetListener {
 
     public static final String NEW_TRANSACTION = "com.example.android.moneylover.NEW_TRANSACTION";
 
@@ -37,6 +38,7 @@ public class NewTransactionActivity extends AppCompatActivity implements Adapter
     private TextView textView_dateCreated;
     private Spinner spinner_category;
     private List<Category> allCategoryName;
+    private MaterialButtonToggleGroup toggleButton;
 
     private String category;
     private int amount;
@@ -63,6 +65,7 @@ public class NewTransactionActivity extends AppCompatActivity implements Adapter
         //endregion
 
         editText_amount = findViewById(R.id.editText_amount);
+        toggleButton = findViewById(R.id.toggleButton);
         textView_dateCreated = findViewById(R.id.textView_dateCreated);
 
         // Nếu user không chọn ngày khác
@@ -95,7 +98,11 @@ public class NewTransactionActivity extends AppCompatActivity implements Adapter
         // TODO: Viết Hàm format string để hiển thị tiền tệ khi nhập....vd: 1000 => 1,000
         try {
             amount = Integer.parseInt(editText_amount.getText().toString());
-            Transaction transaction = new Transaction(category, amount, dateToDbSave);
+            String type = "income";
+            if (toggleButton.getCheckedButtonId() == R.id.button2) {
+                type = "outcome";
+            }
+            Transaction transaction = new Transaction(category, type, amount, dateToDbSave);
             Intent replyIntent = new Intent();
             replyIntent.putExtra(NEW_TRANSACTION, transaction);
             setResult(RESULT_OK, replyIntent);

@@ -18,6 +18,8 @@ public class Transaction implements Serializable {
 
     @ColumnInfo(name = "amount")
     public int Amount;
+    @ColumnInfo(name = "type")
+    public String Type;
 
     @ColumnInfo(name = "date_created")
     public String DateCreated;
@@ -26,13 +28,14 @@ public class Transaction implements Serializable {
 
     }
 //
-//    public Transaction(String category, int amount) {
+//    public Transaction(String category, int amount, String dateCreated) {
 //        Category = category;
 //        Amount = amount;
+//        DateCreated = dateCreated;
 //    }
-
-    public Transaction(String category, int amount, String dateCreated) {
+    public Transaction(String category, String type, int amount, String dateCreated) {
         Category = category;
+        Type = type;
         Amount = amount;
         DateCreated = dateCreated;
     }

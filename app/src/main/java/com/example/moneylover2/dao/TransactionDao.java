@@ -27,6 +27,9 @@ public interface TransactionDao {
     @Query("Select * from transaction_table where date_created = :date order by transactionId desc")
     LiveData<List<Transaction>> getAllTransactionsByDateCreated(String date);
 
+    @Query("Select sum(amount) from transaction_table where type = :type")
+    int getTotalByType(String type);
+
 
 //    @Query("Select * from transaction_table where date_created >= :date1 and date_created <= :date2")
 //    LiveData<List<Transaction>> getAllTransactionsBetweenTwoDate(String date1, String date2);
@@ -35,6 +38,7 @@ public interface TransactionDao {
     //region For testing
     @Query("SELECT * from transaction_table order by date_created")
     List<Transaction> getAllTransactions_Test();
+
     @Query("Select * from transaction_table where date_created = :date")
     List<Transaction> getAllTransactionsByDateCreated_Test(String date);
 

@@ -1,0 +1,58 @@
+package com.example.moneylover2.ui;
+
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.moneylover2.R;
+import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
+import java.util.ArrayList;
+
+public class ShowReportActivity extends AppCompatActivity {
+
+    private PieChart pieChart;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_show_report);
+
+
+
+        setPieChart();
+    }
+
+    public void setPieChart() {
+
+        Intent intent = getIntent();
+        int[] chartNumber = intent.getIntArrayExtra("chart");
+
+        this.pieChart = findViewById(R.id.pieChart);
+        pieChart.getDescription().setEnabled(true);
+        pieChart.setExtraOffsets(5,10,5,5);
+        pieChart.setDragDecelerationFrictionCoef(0.9f);
+        pieChart.setTransparentCircleRadius(61f);
+        pieChart.setHoleColor(Color.WHITE);
+        pieChart.animateY(1000, Easing.EasingOption.EaseInOutCubic);
+        ArrayList<PieEntry> yValues = new ArrayList<>();
+        yValues.add(new PieEntry(chartNumber[0],"Income"));
+        yValues.add(new PieEntry(chartNumber[1],"Outcome"));
+
+        PieDataSet dataSet = new PieDataSet(yValues, "");
+        dataSet.setSliceSpace(3f);
+        dataSet.setSelectionShift(5f);
+        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        PieData pieData = new PieData((dataSet));
+        pieData.setValueTextSize(15f);
+        pieData.setValueTextColor(Color.YELLOW);
+        pieChart.setData(pieData);
+        //PieChart Ends Here
+    }
+}

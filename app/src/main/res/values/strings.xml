@@ -11,4 +11,7 @@
     <string name="fab_description">Add new Transaction</string>
     <string name="left_arrow"><![CDATA[<------]]></string>
     <string name="right_arrow"><![CDATA[------>]]></string>
+    <string name="income">Income</string>
+    <string name="outcome">Outcome</string>
+    <string name="action_report">Report</string>
 </resources>

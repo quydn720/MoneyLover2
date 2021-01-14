@@ -1,7 +1,9 @@
 plugins {
     id 'com.android.application'
 }
-
+repositories {
+    maven { url 'https://jitpack.io' }
+}
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
@@ -76,4 +78,8 @@ dependencies {
     // Lifecycle components
     implementation "android.arch.lifecycle:extensions:$rootProject.archLifecycleVersion"
     annotationProcessor "android.arch.lifecycle:compiler:$rootProject.archLifecycleVersion"
+
+    // Charts
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+
 }

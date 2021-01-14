@@ -159,7 +159,18 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.action_deleteAll_test) {
             Toast.makeText(this, "Delete all transactions", Toast.LENGTH_SHORT).show();
+
             transactionViewModel.deleteAll();
+            return true;
+        }
+
+        if (id == R.id.action_report){
+            Intent intent = new Intent(MainActivity.this, ShowReportActivity.class);
+            int income = transactionViewModel.getTotalByType("income");
+            int outcome = transactionViewModel.getTotalByType("outcome");
+            int[] array = {income, outcome};
+            intent.putExtra("chart", array);
+            startActivity(intent);
             return true;
         }
 

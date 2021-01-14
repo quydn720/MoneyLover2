@@ -45,6 +45,11 @@ public class TransactionRepository {
         return allTransactions;
     }
 
+    public int getTotalByType(String type){
+        int total = transactionDao.getTotalByType(type);
+        return total;
+    }
+
     // to do the delete asynchronous
     private static class deleteAllTransactionsAsyncTask extends AsyncTask<Void, Void, Void> {
 

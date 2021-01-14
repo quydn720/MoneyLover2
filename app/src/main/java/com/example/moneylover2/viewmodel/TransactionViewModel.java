@@ -30,6 +30,10 @@ public class TransactionViewModel extends AndroidViewModel {
         Repository.insert(word);
     }
 
+    public int getTotalByType(String type){
+        return Repository.getTotalByType(type);
+    }
+
 
     public void deleteAll() {
         Repository.deleteAll();

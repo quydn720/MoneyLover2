@@ -39,9 +39,12 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     public void onBindViewHolder(@NonNull TransactionViewHolder holder, int position) {
         if (transactionList != null) {
             Transaction current = transactionList.get(position);
+            boolean isIncome = current.Type.equals("income");
+
             holder.textView_category.setText(current.Category);
-            holder.textView_amount.setText(CurrencyFormat(current.Amount));
+            holder.textView_amount.setText(CurrencyFormat(current.Amount, isIncome));
             holder.textView_date.setText(StringToDateFormat(current.DateCreated));
+
         }
     }
 
@@ -87,9 +90,12 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     }
 
     // Tham số Locale cho phép người dùng có thể thay đổi đơn vị tiền tệ
-    public static String CurrencyFormat(int i) {
+    public static String CurrencyFormat(int i, boolean isIncome) {
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(l);
-        return numberFormat.format(i);
+        String currencyFormatted = numberFormat.format(i);
+        if (isIncome) currencyFormatted += "+";
+        else currencyFormatted += "-";
+        return currencyFormatted;
     }
 
 
