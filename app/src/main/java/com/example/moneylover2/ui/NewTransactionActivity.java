@@ -50,8 +50,22 @@ public class NewTransactionActivity extends AppCompatActivity implements Adapter
 
         CategoryViewModel categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
 
+        List<String> categoryNameList = categoryViewModel.getAllCategoryName();
+
         editText_amount = findViewById(R.id.editText_amount);
         toggleButton = findViewById(R.id.toggleButton);
+        toggleButton.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            String type = checkedId == R.id.button_income ? "income" : "outcome";
+            if (type == "income") {
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, getResources().getStringArray(R.array.default_income_categories_list));
+                spinner_category.setAdapter(arrayAdapter);
+            } else {
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, categoryNameList);
+                spinner_category.setAdapter(arrayAdapter);
+
+            }
+        });
+
         textView_dateCreated = findViewById(R.id.textView_dateCreated);
 
         // Nếu user không chọn ngày khác
@@ -68,7 +82,6 @@ public class NewTransactionActivity extends AppCompatActivity implements Adapter
         if (spinner_category != null) {
             spinner_category.setOnItemSelectedListener(this);
         }
-        List<String> categoryNameList = categoryViewModel.getAllCategoryName();
         // Create an ArrayAdapter using the string array and default spinner layout.
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, categoryNameList);
 

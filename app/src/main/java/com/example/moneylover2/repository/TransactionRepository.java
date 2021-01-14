@@ -27,6 +27,15 @@ public class TransactionRepository {
         TransactionDatabase.databaseWriteExecutor.execute(() -> transactionDao.insert(transaction));
     }
 
+    public int getTotalByCategory(String category){
+        return transactionDao.getTotalByCategory(category);
+    }
+
+    public List<String> getAllCurrentActiveCategory(){
+        return transactionDao.getAllCurrentActiveCategory();
+    }
+
+
     public LiveData<List<Transaction>> getAllTransactions() {
         allTransactions = transactionDao.getAllTransactions();
         return allTransactions;

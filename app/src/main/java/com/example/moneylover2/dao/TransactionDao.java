@@ -30,6 +30,12 @@ public interface TransactionDao {
     @Query("Select sum(amount) from transaction_table where type = :type")
     int getTotalByType(String type);
 
+    @Query("Select sum(amount) from transaction_table where category = :category")
+    int getTotalByCategory(String category);
+
+    @Query("Select category from transaction_table")
+    List<String> getAllCurrentActiveCategory();
+
 
 //    @Query("Select * from transaction_table where date_created >= :date1 and date_created <= :date2")
 //    LiveData<List<Transaction>> getAllTransactionsBetweenTwoDate(String date1, String date2);
