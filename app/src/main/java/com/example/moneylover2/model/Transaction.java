@@ -21,6 +21,23 @@ public class Transaction implements Serializable {
     @ColumnInfo(name = "type")
     public String Type;
 
+    public String getCategory() {
+        return Category;
+    }
+
+    public int getAmount() {
+        return Amount;
+    }
+
+    public String getType() {
+        return Type;
+    }
+
+    public String getDateCreated() {
+        return DateCreated;
+    }
+
+    // TODO: Add class Converter, change date to timestamp : long to work with the database
     @ColumnInfo(name = "date_created")
     public String DateCreated;
 
