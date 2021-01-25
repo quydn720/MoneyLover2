@@ -20,27 +20,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moneylover2.R;
 import com.example.moneylover2.adapter.TransactionListAdapter;
-import com.example.moneylover2.model.Category;
 import com.example.moneylover2.model.Transaction;
-import com.example.moneylover2.viewmodel.CategoryViewModel;
+import com.example.moneylover2.model.Wallet;
 import com.example.moneylover2.viewmodel.TransactionViewModel;
+import com.example.moneylover2.viewmodel.WalletViewModel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static com.example.moneylover2.adapter.TransactionListAdapter.CurrencyFormat;
 import static com.example.moneylover2.ui.NewTransactionActivity.NEW_TRANSACTION;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final int NEW_TRANSACTION_ACTIVITY_REQUEST_CODE = 1;
-    public static final String ALL_CATEGORY_NAME = "com.example.android.moneylover.extra.ALL_CATEGORIES_NAME";
     public static final DateFormat df = new SimpleDateFormat("ddMMyyyy");
 
-    private TextView textView;
+    private TextView textView_total;
     private TextView textView_current_date;
     private TransactionViewModel transactionViewModel;
 
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     private String dateToDbQuery = df.format(d);
     private TransactionListAdapter adapter;
     private Locale l;
+    private List<Wallet> allWallets = new ArrayList<>();
+    private Wallet wallet;
 
 
     @Override
@@ -58,7 +61,14 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        textView = findViewById(R.id.textView);
+        textView_total = findViewById(R.id.textView_total);
+
+        WalletViewModel walletViewModel = ViewModelProviders.of(this).get(WalletViewModel.class);
+        walletViewModel.getAllWallets().observe(this, wallets -> {
+            allWallets = wallets;
+            wallet = allWallets.get(0);
+            textView_total.setText(CurrencyFormat(wallet.getBalance()));
+        });
 
         l = new Locale("vi", "VN");
 
@@ -66,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
         transactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
 
         textView_current_date = findViewById(R.id.textView_current_date);
+
+        // TODO : create a helper/util class
         textView_current_date.setText(DateFormat.getDateInstance(DateFormat.FULL, l).format(d));
         // Event - change the date
         textView_current_date.addTextChangedListener(new TextWatcher() {
@@ -109,6 +121,11 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Deleting transaction...", Toast.LENGTH_SHORT).show();
 
                         transactionViewModel.deleteTransaction(transaction);
+
+                        int sign = transaction.Type.equals("income") ? -1 : 1;
+                        wallet.balance += transaction.Amount * sign;
+                        walletViewModel.update(wallet);
+
                     }
                 }
         );
@@ -171,6 +188,11 @@ public class MainActivity extends AppCompatActivity {
 
             Transaction transaction = (Transaction) data.getSerializableExtra(NEW_TRANSACTION);
             transactionViewModel.insert((transaction));
+
+            WalletViewModel walletViewModel = ViewModelProviders.of(this).get(WalletViewModel.class);
+            int sign = transaction.Type.equals("income") ? 1 : -1;
+            wallet.balance += transaction.Amount * sign;
+            walletViewModel.update(wallet);
         }
     }
 

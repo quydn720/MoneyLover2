@@ -11,19 +11,23 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.moneylover2.dao.CategoryDao;
 import com.example.moneylover2.dao.TransactionDao;
+import com.example.moneylover2.dao.WalletDao;
 import com.example.moneylover2.model.Category;
 import com.example.moneylover2.model.Transaction;
+import com.example.moneylover2.model.Wallet;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Transaction.class, Category.class},
-        version = 1, exportSchema = false)
+@Database(entities = {Transaction.class, Category.class, Wallet.class},
+        version = 3, exportSchema = false)
 public abstract class TransactionDatabase extends RoomDatabase {
 
     public abstract TransactionDao transactionDao();
 
     public abstract CategoryDao categoryDao();
+
+    public abstract WalletDao walletDao();
 
     //  Singleton
     private static TransactionDatabase INSTANCE;
@@ -65,11 +69,13 @@ public abstract class TransactionDatabase extends RoomDatabase {
      */
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
-        private final CategoryDao dao;
+        private final CategoryDao categoryDao;
+        private final WalletDao walletDao;
         String[] defaultCategoryName = {"Family", "Food & Beverages", "Health & Fitness", "Entertainment", "Others", "Education", "Shopping"};
 
         PopulateDbAsync(TransactionDatabase db) {
-            dao = db.categoryDao();
+            categoryDao = db.categoryDao();
+            walletDao = db.walletDao();
         }
 
         @Override
@@ -78,11 +84,14 @@ public abstract class TransactionDatabase extends RoomDatabase {
             // Not needed if you only populate the database
             // when it is first created
             //dao.deleteAll();
+            if (walletDao.getAnyWallet().length < 1) {
+                walletDao.insert(new Wallet("Main", 0));
+            }
 
-            if (dao.getAnyCategory().length < 1) {
+            if (categoryDao.getAnyCategory().length < 1) {
                 for (String s : defaultCategoryName) {
                     Category category = new Category(s);
-                    dao.insert(category);
+                    categoryDao.insert(category);
                 }
             }
             return null;

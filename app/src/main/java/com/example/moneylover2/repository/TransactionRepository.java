@@ -35,6 +35,10 @@ public class TransactionRepository {
         return transactionDao.getAllCurrentActiveCategory();
     }
 
+    public List<String> getAllCurrentActiveCategory_Test(){
+        return transactionDao.getAllCurrentActiveCategory_Test();
+    }
+
 
     public LiveData<List<Transaction>> getAllTransactions() {
         allTransactions = transactionDao.getAllTransactions();

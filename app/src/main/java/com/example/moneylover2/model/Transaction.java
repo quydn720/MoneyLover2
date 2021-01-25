@@ -27,12 +27,7 @@ public class Transaction implements Serializable {
     public Transaction(){
 
     }
-//
-//    public Transaction(String category, int amount, String dateCreated) {
-//        Category = category;
-//        Amount = amount;
-//        DateCreated = dateCreated;
-//    }
+
     public Transaction(String category, String type, int amount, String dateCreated) {
         Category = category;
         Type = type;

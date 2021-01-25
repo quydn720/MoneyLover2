@@ -72,7 +72,7 @@ public class ShowReportActivity extends AppCompatActivity {
         ArrayList<PieEntry> yValues = new ArrayList<>();
 
 
-        List<String> categoriesName = transactionViewModel.getAllCurrentActiveCategory();
+        List<String> categoriesName = transactionViewModel.getAllCurrentActiveCategory_Test();
         for(String categoryName : categoriesName){
             yValues.add(new PieEntry(transactionViewModel.getTotalByCategory(categoryName), categoryName));
         }

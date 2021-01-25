@@ -8,12 +8,13 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView_total"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:gravity="center_horizontal|center_vertical"
         android:text="TODO: Để số tiền trong ví tại đây"
-        android:textSize="20sp"
+        android:textSize="28sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +27,7 @@
         android:textAlignment="center"
         app:layout_constraintEnd_toStartOf="@+id/textView_right_arrow"
         app:layout_constraintStart_toEndOf="@+id/textView_left_arrow"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_total" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
@@ -51,7 +52,7 @@
         android:textAlignment="viewStart"
         app:layout_constraintBottom_toTopOf="@+id/recyclerview"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_total" />
 
     <TextView
         android:id="@+id/textView_right_arrow"
@@ -66,6 +67,6 @@
         android:textAlignment="viewEnd"
         app:layout_constraintBottom_toTopOf="@+id/recyclerview"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_total" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

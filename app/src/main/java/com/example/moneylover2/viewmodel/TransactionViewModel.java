@@ -34,6 +34,10 @@ public class TransactionViewModel extends AndroidViewModel {
         return Repository.getAllCurrentActiveCategory();
     }
 
+    public List<String> getAllCurrentActiveCategory_Test(){
+        return Repository.getAllCurrentActiveCategory_Test();
+    }
+
     public void insert(Transaction word) {
         Repository.insert(word);
     }

@@ -56,14 +56,14 @@ public class NewTransactionActivity extends AppCompatActivity implements Adapter
         toggleButton = findViewById(R.id.toggleButton);
         toggleButton.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             String type = checkedId == R.id.button_income ? "income" : "outcome";
-            if (type == "income") {
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, getResources().getStringArray(R.array.default_income_categories_list));
-                spinner_category.setAdapter(arrayAdapter);
+            ArrayAdapter<String> arrayAdapter;
+            if (type.equals("income")) {
+                arrayAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, getResources().getStringArray(R.array.default_income_categories_list));
             } else {
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, categoryNameList);
-                spinner_category.setAdapter(arrayAdapter);
-
+                arrayAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, categoryNameList);
             }
+
+            spinner_category.setAdapter(arrayAdapter);
         });
 
         textView_dateCreated = findViewById(R.id.textView_dateCreated);
@@ -98,9 +98,6 @@ public class NewTransactionActivity extends AppCompatActivity implements Adapter
         try {
             amount = Integer.parseInt(editText_amount.getText().toString());
             String type = toggleButton.getCheckedButtonId() == R.id.button_income ? "income" : "outcome";
-//            if (toggleButton.getCheckedButtonId() == R.id.button_income) {
-//                type = "income";
-//            }
             Transaction transaction = new Transaction(category, type, amount, dateToDbSave);
             Intent replyIntent = new Intent();
             replyIntent.putExtra(NEW_TRANSACTION, transaction);
@@ -115,7 +112,7 @@ public class NewTransactionActivity extends AppCompatActivity implements Adapter
     }
     //endregion
 
-    //region Event - Show the DatePickerDiaglog
+    //region Event - Show the DatePickerDialog
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getSupportFragmentManager(), "datePicker");

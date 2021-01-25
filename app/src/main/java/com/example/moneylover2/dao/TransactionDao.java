@@ -48,5 +48,8 @@ public interface TransactionDao {
     @Query("Select * from transaction_table where date_created = :date")
     List<Transaction> getAllTransactionsByDateCreated_Test(String date);
 
+    @Query("Select category from transaction_table distinc")
+    List<String> getAllCurrentActiveCategory_Test();
+
     //endregion
 }

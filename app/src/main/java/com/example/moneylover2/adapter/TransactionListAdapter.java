@@ -64,7 +64,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         else return 0;
     }
 
-    public class TransactionViewHolder extends RecyclerView.ViewHolder {
+    public static class TransactionViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView textView_amount, textView_category, textView_date;
 
@@ -85,7 +85,6 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         c.set(Calendar.MONTH, Integer.parseInt(s.substring(2, 4)));
         c.set(Calendar.YEAR, Integer.parseInt(s.substring(4, 8)));
 
-//        Date d = c.getTime();
         return DateFormat.getDateInstance(DateFormat.FULL, l).format(c.getTime());
     }
 
@@ -93,9 +92,17 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     public static String CurrencyFormat(int i, boolean isIncome) {
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(l);
         String currencyFormatted = numberFormat.format(i);
-        if (isIncome) currencyFormatted += "+";
-        else currencyFormatted += "-";
+
+        if (isIncome) currencyFormatted = "+" + currencyFormatted;
+        else currencyFormatted = "-" + currencyFormatted;
+
         return currencyFormatted;
+    }
+
+    public static String CurrencyFormat(int i) {
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(l);
+
+        return numberFormat.format(i);
     }
 
 
